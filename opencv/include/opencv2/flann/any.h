@@ -12,8 +12,6 @@
  * Adapted for FLANN by Marius Muja
  */
 
-//! @cond IGNORED
-
 #include "defines.h"
 #include <stdexcept>
 #include <ostream>
@@ -328,7 +326,5 @@ inline std::ostream& operator <<(std::ostream& out, const any& any_val)
 }
 
 }
-
-//! @endcond
 
 #endif // OPENCV_FLANN_ANY_H_

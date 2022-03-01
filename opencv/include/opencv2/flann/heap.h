@@ -31,8 +31,6 @@
 #ifndef OPENCV_FLANN_HEAP_H_
 #define OPENCV_FLANN_HEAP_H_
 
-//! @cond IGNORED
-
 #include <algorithm>
 #include <vector>
 
@@ -163,7 +161,5 @@ public:
 };
 
 }
-
-//! @endcond
 
 #endif //OPENCV_FLANN_HEAP_H_

@@ -120,8 +120,6 @@ final transformation for each camera.
  */
 class CV_EXPORTS_W AffineBasedEstimator : public Estimator
 {
-public:
-    CV_WRAP AffineBasedEstimator(){}
 private:
     virtual bool estimate(const std::vector<ImageFeatures> &features,
                           const std::vector<MatchesInfo> &pairwise_matches,
@@ -328,18 +326,8 @@ private:
 enum WaveCorrectKind
 {
     WAVE_CORRECT_HORIZ,
-    WAVE_CORRECT_VERT,
-    WAVE_CORRECT_AUTO
+    WAVE_CORRECT_VERT
 };
-
-/** @brief Tries to detect the wave correction kind depending
-on whether a panorama spans horizontally or vertically
-
-@param rmats Camera rotation matrices.
-@return The correction kind to use for this panorama
- */
-CV_EXPORTS
-WaveCorrectKind autoDetectWaveCorrectKind(const std::vector<Mat> &rmats);
 
 /** @brief Tries to make panorama more horizontal (or vertical).
 

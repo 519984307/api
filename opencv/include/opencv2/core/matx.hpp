@@ -147,16 +147,7 @@ public:
     static Matx ones();
     static Matx eye();
     static Matx diag(const diag_type& d);
-    /** @brief Generates uniformly distributed random numbers
-    @param a Range boundary.
-    @param b The other range boundary (boundaries don't have to be ordered, the lower boundary is inclusive,
-    the upper one is exclusive).
-     */
     static Matx randu(_Tp a, _Tp b);
-    /** @brief Generates normally distributed random numbers
-    @param a Mean value.
-    @param b Standard deviation.
-     */
     static Matx randn(_Tp a, _Tp b);
 
     //! dot product computed with the default precision
@@ -172,7 +163,7 @@ public:
     template<int m1, int n1> Matx<_Tp, m1, n1> reshape() const;
 
     //! extract part of the matrix
-    template<int m1, int n1> Matx<_Tp, m1, n1> get_minor(int base_row, int base_col) const;
+    template<int m1, int n1> Matx<_Tp, m1, n1> get_minor(int i, int j) const;
 
     //! extract the matrix row
     Matx<_Tp, 1, n> row(int i) const;
@@ -200,8 +191,8 @@ public:
     Matx<_Tp, m, n> div(const Matx<_Tp, m, n>& a) const;
 
     //! element access
-    const _Tp& operator ()(int row, int col) const;
-    _Tp& operator ()(int row, int col);
+    const _Tp& operator ()(int i, int j) const;
+    _Tp& operator ()(int i, int j);
 
     //! 1D element access
     const _Tp& operator ()(int i) const;
@@ -393,10 +384,6 @@ public:
     _Tp& operator[](int i);
     const _Tp& operator ()(int i) const;
     _Tp& operator ()(int i);
-
-#ifdef CV_CXX11
-    Vec<_Tp, cn>& operator=(const Vec<_Tp, cn>& rhs) = default;
-#endif
 
     Vec(const Matx<_Tp, cn, 1>& a, const Matx<_Tp, cn, 1>& b, Matx_AddOp);
     Vec(const Matx<_Tp, cn, 1>& a, const Matx<_Tp, cn, 1>& b, Matx_SubOp);
@@ -755,13 +742,13 @@ Matx<_Tp, m1, n1> Matx<_Tp, m, n>::reshape() const
 
 template<typename _Tp, int m, int n>
 template<int m1, int n1> inline
-Matx<_Tp, m1, n1> Matx<_Tp, m, n>::get_minor(int base_row, int base_col) const
+Matx<_Tp, m1, n1> Matx<_Tp, m, n>::get_minor(int i, int j) const
 {
-    CV_DbgAssert(0 <= base_row && base_row+m1 <= m && 0 <= base_col && base_col+n1 <= n);
+    CV_DbgAssert(0 <= i && i+m1 <= m && 0 <= j && j+n1 <= n);
     Matx<_Tp, m1, n1> s;
     for( int di = 0; di < m1; di++ )
         for( int dj = 0; dj < n1; dj++ )
-            s(di, dj) = (*this)(base_row+di, base_col+dj);
+            s(di, dj) = (*this)(i+di, j+dj);
     return s;
 }
 
@@ -792,17 +779,17 @@ typename Matx<_Tp, m, n>::diag_type Matx<_Tp, m, n>::diag() const
 }
 
 template<typename _Tp, int m, int n> inline
-const _Tp& Matx<_Tp, m, n>::operator()(int row_idx, int col_idx) const
+const _Tp& Matx<_Tp, m, n>::operator()(int i, int j) const
 {
-    CV_DbgAssert( (unsigned)row_idx < (unsigned)m && (unsigned)col_idx < (unsigned)n );
-    return this->val[row_idx*n + col_idx];
+    CV_DbgAssert( (unsigned)i < (unsigned)m && (unsigned)j < (unsigned)n );
+    return this->val[i*n + j];
 }
 
 template<typename _Tp, int m, int n> inline
-_Tp& Matx<_Tp, m, n>::operator ()(int row_idx, int col_idx)
+_Tp& Matx<_Tp, m, n>::operator ()(int i, int j)
 {
-    CV_DbgAssert( (unsigned)row_idx < (unsigned)m && (unsigned)col_idx < (unsigned)n );
-    return val[row_idx*n + col_idx];
+    CV_DbgAssert( (unsigned)i < (unsigned)m && (unsigned)j < (unsigned)n );
+    return val[i*n + j];
 }
 
 template<typename _Tp, int m, int n> inline
@@ -1276,34 +1263,6 @@ template<typename _Tp, int m, int n> static inline
 Matx<_Tp, m, n> operator * (double alpha, const Matx<_Tp, m, n>& a)
 {
     return Matx<_Tp, m, n>(a, alpha, Matx_ScaleOp());
-}
-
-template<typename _Tp, int m, int n> static inline
-Matx<_Tp, m, n>& operator /= (Matx<_Tp, m, n>& a, float alpha)
-{
-    for( int i = 0; i < m*n; i++ )
-        a.val[i] = a.val[i] / alpha;
-    return a;
-}
-
-template<typename _Tp, int m, int n> static inline
-Matx<_Tp, m, n>& operator /= (Matx<_Tp, m, n>& a, double alpha)
-{
-    for( int i = 0; i < m*n; i++ )
-        a.val[i] = a.val[i] / alpha;
-    return a;
-}
-
-template<typename _Tp, int m, int n> static inline
-Matx<_Tp, m, n> operator / (const Matx<_Tp, m, n>& a, float alpha)
-{
-    return Matx<_Tp, m, n>(a, 1.f/alpha, Matx_ScaleOp());
-}
-
-template<typename _Tp, int m, int n> static inline
-Matx<_Tp, m, n> operator / (const Matx<_Tp, m, n>& a, double alpha)
-{
-    return Matx<_Tp, m, n>(a, 1./alpha, Matx_ScaleOp());
 }
 
 template<typename _Tp, int m, int n> static inline
