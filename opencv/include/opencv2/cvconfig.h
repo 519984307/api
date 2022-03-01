@@ -26,7 +26,7 @@
 /* #undef HAVE_AVFOUNDATION */
 
 /* V4L2 capturing support */
-/* #undef HAVE_CAMV4L2 */
+#define HAVE_CAMV4L2
 
 /* AMD's Basic Linear Algebra Subprograms Library*/
 /* #undef HAVE_CLAMDBLAS */
@@ -63,13 +63,13 @@
 /* #undef HAVE_D3D9 */
 
 /* DirectShow Video Capture library */
-#define HAVE_DSHOW
+/* #undef HAVE_DSHOW */
 
 /* Eigen Matrix & Linear Algebra Library */
 /* #undef HAVE_EIGEN */
 
 /* FFMpeg video library */
-#define HAVE_FFMPEG
+/* #undef HAVE_FFMPEG */
 
 /* Geospatial Data Abstraction Library */
 /* #undef HAVE_GDAL */
@@ -90,7 +90,7 @@
 /* #undef HAVE_VULKAN */
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#define HAVE_INTTYPES_H 1
+/* #undef HAVE_INTTYPES_H */
 
 /* Intel Perceptual Computing SDK library */
 /* #undef HAVE_INTELPERC */
@@ -102,13 +102,13 @@
 /* #undef HAVE_IPP_IW_LL */
 
 /* JPEG-2000 codec */
-#define HAVE_JASPER
+/* #undef HAVE_JASPER */
 
 /* IJG JPEG codec */
 #define HAVE_JPEG
 
 /* libpng/png.h needs to be included */
-/* #undef HAVE_LIBPNG_PNG_H */
+#define HAVE_LIBPNG_PNG_H
 
 /* GDCM DICOM codec */
 /* #undef HAVE_GDCM */
@@ -146,10 +146,10 @@
 #define HAVE_PNG
 
 /* Posix threads (pthreads) */
-/* #undef HAVE_PTHREAD */
+#define HAVE_PTHREAD
 
 /* parallel_for with pthreads */
-/* #undef HAVE_PTHREADS_PF */
+#define HAVE_PTHREADS_PF
 
 /* Qt support */
 /* #undef HAVE_QT */
@@ -170,7 +170,7 @@
 /* #undef HAVE_VIDEOIO */
 
 /* Win32 UI */
-#define HAVE_WIN32UI
+/* #undef HAVE_WIN32UI */
 
 /* XIMEA camera support */
 /* #undef HAVE_XIMEA */

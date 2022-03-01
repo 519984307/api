@@ -1,6 +1,6 @@
 ﻿#ifndef SCANNER_H
 #define SCANNER_H
-#ifdef APP_WINDOWS_X86
+#ifdef APP_WINDOWS_X64
 #else
 #include "sane/include/sane.h"
 #include <QObject>
