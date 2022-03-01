@@ -1,0 +1,14 @@
+prefix=/e/opensource/build
+exec_prefix=${prefix}
+libdir=/e/opensource/build/lib
+includedir=/e/opensource/build/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 56.51.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -lm -luser32 -lbcrypt
+Cflags: -I${includedir}

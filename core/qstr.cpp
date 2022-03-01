@@ -1,0 +1,5 @@
+﻿#include "qstr.h"
+
+
+
+
