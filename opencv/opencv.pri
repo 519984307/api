@@ -1,5 +1,8 @@
-INCLUDEPATH +=\
-  $$PWD/include
+
+
+
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include
 
 contains(DEFINES,APP_WINDOWS_X64) {
 LIBS +=\
@@ -7,6 +10,13 @@ LIBS +=\
 }
 contains(DEFINES,APP_LINUX_X64) {
 LIBS +=\
-  -L$$PWD/linux/x64/lib -lopencv_world
+  unix:!macx: LIBS += -L$$PWD/linux/x64/lib/ -lopencv_world
 }
+
+
+
+
+
+
+
 

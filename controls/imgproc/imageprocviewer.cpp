@@ -40,6 +40,10 @@ void ImageProcViewer::loadFromFile(QString pathName)
     }
 
     m_imgData = imread(m_pathName.toLocal8Bit().data(), IMREAD_COLOR);
+    if (m_imgData.empty())
+    {
+        return;
+    }
     cvtColor(m_imgData, m_imgData, COLOR_BGR2RGB);
     ImageProcHistoryObject* obj = new ImageProcHistoryObject(this);
     obj->setMat(m_imgData.clone());
