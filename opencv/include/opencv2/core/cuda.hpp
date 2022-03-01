@@ -126,7 +126,7 @@ public:
     CV_WRAP GpuMat(int rows, int cols, int type, GpuMat::Allocator* allocator = GpuMat::defaultAllocator());
     CV_WRAP GpuMat(Size size, int type, GpuMat::Allocator* allocator = GpuMat::defaultAllocator());
 
-    //! constructs GpuMat and fills it with the specified value _s
+    //! constucts GpuMat and fills it with the specified value _s
     CV_WRAP GpuMat(int rows, int cols, int type, Scalar s, GpuMat::Allocator* allocator = GpuMat::defaultAllocator());
     CV_WRAP GpuMat(Size size, int type, Scalar s, GpuMat::Allocator* allocator = GpuMat::defaultAllocator());
 
@@ -304,9 +304,6 @@ public:
 
     //! returns true if GpuMat data is NULL
     CV_WRAP bool empty() const;
-
-    // returns pointer to cuda memory
-    CV_WRAP void* cudaPtr() const;
 
     //! internal use method: updates the continuity flag
     CV_WRAP void updateContinuityFlag();
@@ -683,9 +680,6 @@ public:
 
     //! returns true if stream object is not default (!= 0)
     operator bool_type() const;
-
-    //! return Pointer to CUDA stream
-    CV_WRAP void* cudaPtr() const;
 
     class Impl;
 

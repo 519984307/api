@@ -3,7 +3,7 @@ INCLUDEPATH +=\
 
 contains(DEFINES,APP_WINDOWS_X64) {
 LIBS +=\
-  -L$$PWD/windows/x64/mingw/lib -llibopencv_world451.dll
+  -L$$PWD/windows/x64/mingw/lib -llibopencv_world401.dll
 }
 contains(DEFINES,APP_LINUX_X64) {
 LIBS +=\

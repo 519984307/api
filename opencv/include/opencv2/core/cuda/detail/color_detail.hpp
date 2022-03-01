@@ -93,38 +93,38 @@ namespace cv { namespace cuda { namespace device
         }
 
         //constants for conversion from/to RGB and Gray, YUV, YCrCb according to BT.601
-        constexpr float B2YF = 0.114f;
-        constexpr float G2YF = 0.587f;
-        constexpr float R2YF = 0.299f;
+        const float B2YF = 0.114f;
+        const float G2YF = 0.587f;
+        const float R2YF = 0.299f;
 
         //to YCbCr
-        constexpr float YCBF = 0.564f; // == 1/2/(1-B2YF)
-        constexpr float YCRF = 0.713f; // == 1/2/(1-R2YF)
-        const     int   YCBI = 9241;  // == YCBF*16384
-        const     int   YCRI = 11682; // == YCRF*16384
+        const float YCBF = 0.564f; // == 1/2/(1-B2YF)
+        const float YCRF = 0.713f; // == 1/2/(1-R2YF)
+        const int YCBI = 9241;  // == YCBF*16384
+        const int YCRI = 11682; // == YCRF*16384
         //to YUV
-        constexpr float B2UF = 0.492f;
-        constexpr float R2VF = 0.877f;
-        const     int   B2UI = 8061;  // == B2UF*16384
-        const     int   R2VI = 14369; // == R2VF*16384
+        const float B2UF = 0.492f;
+        const float R2VF = 0.877f;
+        const int B2UI = 8061;  // == B2UF*16384
+        const int R2VI = 14369; // == R2VF*16384
         //from YUV
-        constexpr float U2BF = 2.032f;
-        constexpr float U2GF = -0.395f;
-        constexpr float V2GF = -0.581f;
-        constexpr float V2RF = 1.140f;
-        const     int   U2BI = 33292;
-        const     int   U2GI = -6472;
-        const     int   V2GI = -9519;
-        const     int   V2RI = 18678;
+        const float U2BF = 2.032f;
+        const float U2GF = -0.395f;
+        const float V2GF = -0.581f;
+        const float V2RF = 1.140f;
+        const int U2BI = 33292;
+        const int U2GI = -6472;
+        const int V2GI = -9519;
+        const int V2RI = 18678;
         //from YCrCb
-        constexpr float CB2BF = 1.773f;
-        constexpr float CB2GF = -0.344f;
-        constexpr float CR2GF = -0.714f;
-        constexpr float CR2RF = 1.403f;
-        const     int   CB2BI = 29049;
-        const     int   CB2GI = -5636;
-        const     int   CR2GI = -11698;
-        const     int   CR2RI = 22987;
+        const float CB2BF = 1.773f;
+        const float CB2GF = -0.344f;
+        const float CR2GF = -0.714f;
+        const float CR2RF = 1.403f;
+        const int CB2BI = 29049;
+        const int CB2GI = -5636;
+        const int CR2GI = -11698;
+        const int CR2RI = 22987;
 
         enum
         {
