@@ -9,9 +9,8 @@ LIBS +=\
   -L$$PWD/windows/x64/mingw/lib -llibopencv_world401.dll
 }
 contains(DEFINES,APP_LINUX_X64) {
-
-
- unix: LIBS += -L$$PWD/linux/x64/lib/libopencv_world.so.4.0
+LIBS +=\
+   -L$$PWD/linux/x64/lib -lopencv_world
 }
 
 
