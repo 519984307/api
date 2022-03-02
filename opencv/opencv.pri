@@ -12,6 +12,10 @@ contains(DEFINES,APP_LINUX_X64) {
 LIBS +=\
    -L$$PWD/linux/x64/lib -lopencv_world
 }
+contains(DEFINES,APP_LINUX_ARM) {
+LIBS +=\
+   -L$$PWD/linux/arm/lib -lopencv_world
+}
 
 
 

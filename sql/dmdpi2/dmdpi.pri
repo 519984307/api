@@ -9,6 +9,10 @@ contains(DEFINES,APP_LINUX_X64) {
 LIBS+= -L$$PWD/linux/x64/lib/ -ldmdpi
 
 }
+contains(DEFINES,APP_LINUX_ARM) {
+LIBS+= -L$$PWD/linux/arm/lib/ -ldmdpi
+
+}
 
 
 HEADERS += \
