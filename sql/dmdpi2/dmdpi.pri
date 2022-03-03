@@ -13,7 +13,10 @@ contains(DEFINES,APP_LINUX_ARM) {
 LIBS+= -L$$PWD/linux/arm/lib/ -ldmdpi
 
 }
+contains(DEFINES,APP_LINUX_MIPS) {
+LIBS+= -L$$PWD/linux/mips/lib/ -ldmdpi
 
+}
 
 HEADERS += \
     $$PWD/dmsqldb.h \
