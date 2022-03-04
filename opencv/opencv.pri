@@ -1,5 +1,7 @@
 
-
+contains(DEFINES,APP_LINUX_MIPS) {
+   DEFINES += _GLIBCXX_USE_CXX11_ABI=0
+}
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
@@ -18,7 +20,7 @@ LIBS +=\
 }
 contains(DEFINES,APP_LINUX_MIPS) {
 LIBS +=\
-   -L$$PWD/linux/mips/lib -lopencv_world
+    $$PWD/linux/mips/lib/libopencv_world.so.4.0
 }
 
 
