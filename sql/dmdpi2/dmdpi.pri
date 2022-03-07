@@ -1,7 +1,10 @@
 
+DEFINES+=DM64
+
 INCLUDEPATH+= \
               $$PWD/include
-
+DEPENDPATH+= \
+            $$PWD/include
 contains(DEFINES,APP_WINDOWS_X64) {
 LIBS+= -L$$PWD/windows/x64/lib/ -ldmdpi
 }

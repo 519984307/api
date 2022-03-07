@@ -31,6 +31,7 @@ ImageProcViewer::~ImageProcViewer()
 void ImageProcViewer::loadFromFile(QString pathName)
 {
     m_pathName = pathName;
+    qDebug() << pathName;
     clear();
     QFileInfo fileInfo(pathName);
     if ((fileInfo.isDir()) || (!fileInfo.exists()))

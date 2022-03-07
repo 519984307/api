@@ -4,6 +4,11 @@
 #include <QObject>
 #include "../api/controls/edit/labeledit.h"
 
+const QString WSTC_EDIT = "edit";
+const QString WSTC_TEXT = "edit";
+const QString WSTC_BUTTON = "button";
+
+
 class WordStyleTableCell : public QObject
 {
     Q_OBJECT
@@ -53,6 +58,14 @@ public:
     const QString& fieldName() const;
     void setFieldName(const QString& newFieldName);
 
+
+
+    const QString& name() const;
+    void setName(const QString& newName);
+
+    const QPixmap& image() const;
+    void setImage(const QPixmap& newImage);
+
 signals:
 
 private:
@@ -70,6 +83,8 @@ private:
     QString m_value;
     QRect m_rect;
     QString m_fieldName;
+    QPixmap m_image;
+    QString m_name;
 };
 
 #endif // WORDSTYLETABLECELL_H

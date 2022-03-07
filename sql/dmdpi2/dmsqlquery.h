@@ -5,6 +5,11 @@
 #include "dmsqldb.h"
 #include <QJsonArray>
 #include <QJsonObject>
+extern "C" {
+#include "DPItypes.h"
+#include "DPI.h"
+#include "DPIext.h"
+}
 
 class DmSQLQuery : public QObject
 {
@@ -26,7 +31,8 @@ public:
     bool next();
     QString fieldValue(int i);
     bool execute(QString sql);
-
+    bool saveBlob(DmSQLDb* db, QString sql, QByteArray& data);
+    QByteArray getBlob(DmSQLDb* db, QString sql);
 signals:
 private:
     dhstmt m_dhstmt;
@@ -34,6 +40,7 @@ private:
     QMap<QString, int> m_conInfos;
     QString m_sql;
     DPIRETURN executeSQL(QString sql);
+    DPIRETURN prepareSQL(QString sql);
 };
 
 #endif // DMSQLQUERY_H

@@ -177,10 +177,10 @@ void ScannerManager::startScan(ScanInfo& info)
         QMessageBox::information(nullptr, "提示", "扫描仪参数设置失败,请重新尝试设置直到成功过，否则无效!");
         return;
     }
-#ifdef  QT_WIN
+#ifdef  APP_WINDOWS_X64
     if (m_scanType == "平板扫描")
     {
-#ifdef APP_WINDOWS_X64
+
         if (ScannerApp::m_ScannerCore->doScanToFile(info.pathName))
         {
 
@@ -189,7 +189,7 @@ void ScannerManager::startScan(ScanInfo& info)
         {
             QMessageBox::information(nullptr, "提示", "扫描失败，请重试");
         }
-#endif
+
     }
     else
     {

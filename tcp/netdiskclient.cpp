@@ -1,32 +1,14 @@
 ﻿#include "netdiskclient.h"
 
 NetDiskClient::NetDiskClient(QObject* parent)
-    : QObject(parent)
+    : AbstractDistClient(parent)
 {
 
     m_ip = "127.0.0.1";
     m_port = 9001;
 }
 
-QString NetDiskClient::ip() const
-{
-    return m_ip;
-}
 
-void NetDiskClient::setIp(const QString& ip)
-{
-    m_ip = ip;
-}
-
-int NetDiskClient::port() const
-{
-    return m_port;
-}
-
-void NetDiskClient::setPort(int port)
-{
-    m_port = port;
-}
 
 bool NetDiskClient::connectHost()
 {

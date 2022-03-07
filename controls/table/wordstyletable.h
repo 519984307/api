@@ -12,7 +12,6 @@
 
 
 #include "wordstyletablecell.h"
-
 namespace Ui
 {
 class WordStyleTable;
@@ -30,9 +29,13 @@ public:
     QJsonArray notNullDataToJsonArray();
     void loadDataFromArray(QJsonArray& arr);
     QString cellValue(QString fieldName);
+    WordStyleTableCell* findCellByName(QString name);
+signals:
+    void cellButtonClick(WordStyleTableCell* cell);
 protected:
     void paintEvent(QPaintEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 private:
     Ui::WordStyleTable* ui;
     int m_marginLeft;

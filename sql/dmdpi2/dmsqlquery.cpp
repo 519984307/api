@@ -223,3 +223,81 @@ DPIRETURN DmSQLQuery::executeSQL(QString sql)
     qDebug() << ret;
     return ret;
 }
+
+DPIRETURN DmSQLQuery::prepareSQL(QString sql)
+{
+    string str = sql.toLocal8Bit().toStdString();
+
+    sdbyte* bsql = (sdbyte*) str.c_str();
+
+    DPIRETURN ret = dpi_prepare(m_dhstmt, bsql);
+    qDebug() << ret;
+    return ret;
+
+}
+bool DmSQLQuery::saveBlob(DmSQLDb* db, QString sql, QByteArray& data)
+{
+    sdbyte  tmpbuf[80 * 1024];
+
+    qDebug() << sql;
+    m_database = db;
+    close();
+    open();
+    DPIRETURN rt = prepareSQL(sql);
+    sdint4     c1 = DSQL_DATA_AT_EXEC;
+    slength     c1_ind_ptr = DSQL_DATA_AT_EXEC;
+    dpointer     c1_val_ptr = nullptr;
+    rt = dpi_bind_param(m_dhstmt, 1, DSQL_PARAM_INPUT, DSQL_C_BINARY,  DSQL_BLOB, sizeof(c1), 0, &c1, sizeof(c1), &c1_ind_ptr);
+    if (dpi_exec(m_dhstmt) == DSQL_NEED_DATA)
+    {
+        if (dpi_param_data(m_dhstmt, &c1_val_ptr) == DSQL_NEED_DATA) /* 绑定数据 */
+        {
+            int m = data.size();
+            int n = 0;
+
+            while (m > n)
+            {
+                int len = (m - n) >= (80 * 1024) ? (80 * 1024) : (m - n);
+                const char* buf = data.data();
+
+                memcpy(tmpbuf, &buf[n], len);
+                dpi_put_data(m_dhstmt, tmpbuf, len);
+                n += len;
+            }
+        }
+        dpi_param_data(m_dhstmt, &c1_val_ptr); /* 绑定数据 */
+    }
+
+    qDebug() << "end";
+    return true;
+}
+
+QByteArray DmSQLQuery::getBlob(DmSQLDb* db, QString sql)
+{
+    qDebug() << sql;
+    m_database = db;
+    close();
+    open();
+    selectSQL(sql);
+    slength val_len = 0;
+    slength len = 0;
+    sdbyte  tmpbuf[80 * 1024];
+    QByteArray data;
+    while (next())
+    {
+        while (DSQL_SUCCEEDED(dpi_get_data(m_dhstmt, 1, DSQL_C_BINARY, tmpbuf, 80 * 1024, &val_len)))
+        {
+            len = val_len > (80 * 1024) ? (80 * 1024) : val_len;
+            if (len == -1)
+            {
+                break;
+            }
+            char* buf = new char[len];
+            memcpy(buf, &tmpbuf, len);
+            data.append(buf, len);
+            delete [] buf;
+
+        }
+    }
+    return data;
+}

@@ -4,6 +4,7 @@ WordStyleTableCell::WordStyleTableCell(QObject* parent) : QObject(parent)
 {
     m_extraWidth = 0;
     m_extraLeft = 0;
+    m_image = QPixmap();
 
 }
 
@@ -156,5 +157,29 @@ const QString& WordStyleTableCell::fieldName() const
 void WordStyleTableCell::setFieldName(const QString& newFieldName)
 {
     m_fieldName = newFieldName;
+}
+
+const QString& WordStyleTableCell::name() const
+{
+    return m_name;
+}
+
+
+
+
+
+void WordStyleTableCell::setName(const QString& newName)
+{
+    m_name = newName;
+}
+
+const QPixmap& WordStyleTableCell::image() const
+{
+    return m_image;
+}
+
+void WordStyleTableCell::setImage(const QPixmap& newImage)
+{
+    m_image = newImage;
 }
 

@@ -115,6 +115,15 @@ void WordStyleTable::loadFromJson(QString pathName)
             cell->setValue(jCellObj["value"].toString());
         }
 
+        if (jCellObj["name"].isNull())
+        {
+            cell->setName("");
+        }
+        else
+        {
+            cell->setName(jCellObj["name"].toString());
+        }
+
         if (!jCellObj["extraWidth"].isNull())
         {
             cell->setExtraWidth(jCellObj["extraWidth"].toInt());
@@ -207,10 +216,26 @@ QString WordStyleTable::cellValue(QString fieldName)
 
 }
 
+WordStyleTableCell* WordStyleTable::findCellByName(QString name)
+{
+    for (int i = 0; i < m_cells.count(); i++)
+    {
+        WordStyleTableCell* cell = m_cells.at(i);
+        if (cell->name() == name)
+        {
+            return cell;
+        }
+    }
+
+    return nullptr;
+
+}
+
 void WordStyleTable::paintEvent(QPaintEvent* event)
 {
     QPainter painter;
     painter.begin(this);
+    QPoint curPt = m_helper->cursorPos();
     QRect clientRc = m_helper->clientRect();
     painter.fillRect(clientRc, QBrush(Qt::white));
     for (int i = 0; i < m_cells.count(); i++)
@@ -244,6 +269,24 @@ void WordStyleTable::paintEvent(QPaintEvent* event)
         {
             painter.drawText(rc, Qt::AlignCenter, cell->value());
         }
+        else if (cell->style() == "button")
+        {
+            painter.save();
+            if (rc.contains(curPt))
+            {
+                painter.fillRect(rc, QBrush(QColor(197, 197, 197)));
+            }
+            painter.drawText(rc, Qt::AlignCenter, cell->value());
+            painter.restore();
+        }
+        else if (cell->style() == "image")
+        {
+            if (!cell->image().isNull())
+            {
+                painter.drawPixmap(rc, cell->image(), cell->image().rect());
+            }
+
+        }
         cell->setRect(rc);
 
 
@@ -265,6 +308,24 @@ void WordStyleTable::mouseMoveEvent(QMouseEvent* event)
                         cell->rect().width() - 2,
                         cell->rect().height() - 2);
             cell->edit->showEdit(edtRc, cell->edit->text(), false);
+        }
+    }
+
+}
+
+void WordStyleTable::mousePressEvent(QMouseEvent* event)
+{
+    QPoint curPt = m_helper->cursorPos();
+    for (int i = 0; i < m_cells.count(); i++)
+    {
+        WordStyleTableCell* cell = m_cells.at(i);
+        if (cell->style() == WSTC_BUTTON)
+        {
+            if (cell->rect().contains(curPt))
+            {
+                qDebug() << cell->value();
+                emit cellButtonClick(cell);
+            }
         }
     }
 

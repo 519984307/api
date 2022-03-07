@@ -2,8 +2,11 @@
 #define DMSQLDB_H
 
 #include <QObject>
-#include "DPI.h"
+
 #include <QDebug>
+extern "C" {
+#include "DPI.h"
+}
 using namespace std;
 
 class DmSQLDb : public QObject

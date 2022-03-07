@@ -14,19 +14,15 @@
 #include <QThread>
 #include <QDataStream>
 #include "netdiskfilestream.h"
+#include "abstractdistclient.h"
 
-
-class NetDiskClient : public QObject
+class NetDiskClient : public AbstractDistClient
 {
     Q_OBJECT
 public:
     explicit NetDiskClient(QObject* parent = nullptr);
 
-    QString ip() const;
-    void setIp(const QString& ip);
 
-    int port() const;
-    void setPort(const int port);
     bool connectHost();
 
     bool isConnected() const;
@@ -40,8 +36,6 @@ public:
 signals:
 
 private:
-    QString m_ip;
-    int m_port;
     bool m_isConnected;
 
 };
