@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QEventLoop>
 #include <QFile>
+#include <QFileInfo>
 
 class HttpFileTransferClient : public QObject
 {

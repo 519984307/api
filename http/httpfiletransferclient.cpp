@@ -60,6 +60,7 @@ bool HttpFileTransferClient::download(QString url, QMap<QString, QString>& value
 bool HttpFileTransferClient::upload(QString url, QMap<QString, QString>& values, QString savefieldName, QString saveFileName)
 {
     QFile* file = new QFile(saveFileName);
+    QFileInfo fileInfo(saveFileName);
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     QNetworkRequest request;
     // request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("multipart/form-data"));
@@ -89,14 +90,14 @@ bool HttpFileTransferClient::upload(QString url, QMap<QString, QString>& values,
         QHttpPart filePart;
 
         QString requestFormat = QString("form-data;name=%1;filename=%2;type = application/octet-stream")
-                                .arg(saveFileName)
-                                .arg(file->fileName());
-
+                                .arg(savefieldName)
+                                .arg(fileInfo.fileName());
+        qDebug() << requestFormat;
         filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(requestFormat));
 
 
 
-        filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(QString("form-data;name=%1;filename=%2;type = file").arg("imagefile").arg(file->fileName())));
+
         file->open(QIODevice::ReadOnly);
         filePart.setBodyDevice(file);
         //file->setParent(multiPart);
