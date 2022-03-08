@@ -24,6 +24,7 @@ public:
     int distance(QPoint pt1, QPoint pt2);
     double distanced(QPoint pt1, QPoint pt2);
     void drawRect(QPainter& painter, QPoint& pt1, QPoint& pt2);
+    void drawRect(QPainter& painter, QRect rect, bool drawLeft, bool drawTop, bool drawRight, bool drawBottom);
     void drawRect(QPainter& painter, int startX, int startY, QRect rc);
     void drawRect(QPainter& painter, int startX, int startY, QPoint center, int width, int height);
     void drawPixmap(QPainter& painter, int startX, int startY, QRect rc, QPixmap& pix);

@@ -71,6 +71,31 @@ void DrawObject::drawRect(QPainter& painter, QPoint& pt1, QPoint& pt2)
 
 }
 
+void DrawObject::drawRect(QPainter& painter, QRect rect, bool drawLeft, bool drawTop, bool drawRight, bool drawBottom)
+{
+    if (drawLeft)
+    {
+        painter.drawLine(rect.left(), rect.top(), rect.left(), rect.bottom());
+    }
+    if (drawTop)
+    {
+        painter.drawLine(rect.left(), rect.top(), rect.right(), rect.top());
+    }
+    if (drawRight)
+    {
+        painter.drawLine(rect.right(), rect.top(), rect.right(), rect.bottom());
+    }
+
+
+    if (drawBottom)
+    {
+        painter.drawLine(rect.left(), rect.top() + rect.height(), rect.right(), rect.top() + rect.height());
+        qDebug() << (rect.top() + rect.height());
+    }
+
+
+}
+
 void DrawObject::drawRect(QPainter& painter, int startX, int startY, QRect rc)
 {
 

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "abstractprinter.h"
 #include "reportpage.h"
+
 class ReportPrinter : public AbstractPrinter
 {
     Q_OBJECT
@@ -15,6 +16,7 @@ public:
 signals:
 private:
     QPrinter* m_printer;
+    DrawObject* m_drawObj;
 
 };
 
