@@ -71,7 +71,7 @@ void DrawObject::drawRect(QPainter& painter, QPoint& pt1, QPoint& pt2)
 
 }
 
-void DrawObject::drawRect(QPainter& painter, QRect rect, bool drawLeft, bool drawTop, bool drawRight, bool drawBottom)
+void DrawObject::drawRect(QPainter& painter, QRectF rect, bool drawLeft, bool drawTop, bool drawRight, bool drawBottom)
 {
     if (drawLeft)
     {

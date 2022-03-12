@@ -2,7 +2,10 @@
 #define REPORTCELL_H
 
 #include <QObject>
-
+#include <QRectF>
+#include <QJsonObject>
+class ReportCell;
+typedef void (*ProcessCell)(ReportCell* cell) ;
 class ReportCell : public QObject
 {
     Q_OBJECT
@@ -13,30 +16,76 @@ public:
     const QString& text() const;
     void setText(const QString& newText);
 
-    int left() const;
-    void setLeft(int newLeft);
 
-    int top() const;
-    void setTop(int newTop);
+    double right();
+    void setRectMm(double leftMm, double topMm, double widthMm, double BottomMm);
+    double MmToPt(double m);
+    double left() const;
+    void setLeft(double newLeft);
 
-    int width() const;
-    void setWidth(int newWidth);
+    double top() const;
+    void setTop(double newTop);
 
-    int height() const;
-    void setHeight(int newHeight);
-    int right();
-    void setRectMm(int leftMm, int topMm, int widthMm, int BottomMm);
-    int MmToPt(int m);
+    double width() const;
+    void setWidth(double newWidth);
+
+    double height() const;
+    void setHeight(double newHeight);
+
+    const QString& fontName() const;
+    void setFontName(const QString& newFontName);
+
+    int fontSize() const;
+    void setFontSize(int newFontSize);
+
+    void drawAllBorder(bool b);
+
+    bool drawLeft() const;
+    void setDrawLeft(bool newDrawLeft);
+
+    bool drawRight() const;
+    void setDrawRight(bool newDrawRight);
+
+    bool drawTop() const;
+    void setDrawTop(bool newDrawTop);
+
+    bool drawBottom() const;
+    void setDrawBottom(bool newDrawBottom);
+
+    QRectF rectF();
+    QRect rect();
+
+    bool selected() const;
+    void setSelected(bool newSelected);
+    void movePositionBy(double dx, double dy);
+
+    int colIndex() const;
+    void setColIndex(int newColIndex);
+
+    int rowIndex() const;
+    void setRowIndex(int newRowIndex);
+    double bottom();
+
+    QJsonObject toJsonObject();
+    void fromJObject(QJsonObject& jobj);
+
 signals:
 private:
     bool m_drawLeft;
     bool m_drawRight;
+    bool m_drawTop;
+    bool m_drawBottom;
 
-    int m_left;
-    int m_top;
-    int m_width;
-    int m_height;
+    double m_left;
+    double m_top;
+    double m_width;
+    double m_height;
     QString m_text;
+    QString m_fontName;
+    int m_fontSize;
+    bool m_selected;
+    int m_colIndex;
+    int m_rowIndex;
 
 };
 

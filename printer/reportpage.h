@@ -16,7 +16,9 @@ public:
     double factor() const;
     void setFactor(double newFactor);
     void addCell(ReportCell* cell);
+    double addHorCells(double left, double top, double height, QStringList& values, QList<double>& widths);
     ReportCell* addCellAtRight(ReportCell* leftCell, int width, QString text);
+    void addCellsFromJson(QString fileName);
 
 signals:
 private:

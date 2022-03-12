@@ -80,6 +80,13 @@ QPoint WidgetHelper::cursorPos()
     return pt;
 }
 
+QPoint WidgetHelper::virtualCurPos(double dx, double dy)
+{
+    QPoint pt = cursorPos();
+    pt = QPoint(pt.x() + dx, pt.y() + dy);
+    return pt;
+}
+
 int WidgetHelper::itemsTop() const
 {
     return m_itemsTop;

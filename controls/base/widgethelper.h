@@ -24,6 +24,7 @@ public:
     QWidget* control() const;
     void setControl(QWidget* control);
     QPoint cursorPos();
+    QPoint virtualCurPos(double dx, double dy);
 
     int itemsTop() const;
     void setItemsTop(int itemsTop);
