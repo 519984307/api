@@ -37,7 +37,7 @@ void ReportDesignWindow::on_btnSelect_clicked()
 
 void ReportDesignWindow::on_btnDelete_clicked()
 {
-    m_view->setOperation(OP_DELETE_OBJECT);
+    m_view->deleteSelectCells();
 
 }
 
@@ -136,5 +136,11 @@ void ReportDesignWindow::on_btnCalValues_clicked()
 {
     QString s = QString("选中对象总长度:%1").arg(m_view->calSelectCellsSumWidth());
     QMessageBox::information(this, "计算结果", s);
+}
+
+
+void ReportDesignWindow::on_btnSetResizeCellHeight_clicked()
+{
+    m_view->resetSelectCellsHeightByFactor(0.5);
 }
 

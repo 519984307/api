@@ -41,7 +41,7 @@ public:
     void setFileName(const QString& newFileName);
     void saveToFile(QString fileName);
     void loadFromFile(QString fileName);
-    void processSelectCells(ProcessCell processCell);
+    void processSelectCells(std::function<void(ReportCell* cell)> processCell);
     ReportCell* getFirstSelectCell();
     QPoint getCursorPoint();
 
@@ -51,6 +51,9 @@ public:
 
     void fitToMaxHeight();
     double calSelectCellsSumWidth();
+    void resetSelectCellsHeightByFactor(double factor);
+    ///删除选中对象
+    void deleteSelectCells();
 
 protected:
     void paintEvent(QPaintEvent* event);

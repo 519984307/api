@@ -6,6 +6,8 @@ ReportPrinter::ReportPrinter(QObject* parent) : AbstractPrinter(parent)
 
 
 
+
+
 }
 
 void ReportPrinter::print()
@@ -18,13 +20,15 @@ void ReportPrinter::print()
 
     m_printer->setPageSize(QPrinter::A4);
 
-    double factor = m_printer->resolution() / 96;
+    double factor = (double)(m_printer->resolution() / 96);
+    qDebug() << factor;
 
-    m_printer->setPageMargins(6, 6, 6, 6, QPrinter::Millimeter);
+    m_printer->setPageMargins(0, 0, 0, 0, QPrinter::Point);
     qDebug() << m_printer->resolution();
     QPainter painter;
 
     painter.begin(m_printer);
+    qDebug() << painter.viewport();
 
 
     for (int i = 0; i < pages.count(); i++)

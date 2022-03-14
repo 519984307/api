@@ -22,13 +22,14 @@ void ReportPage::draw(QPainter& painter)
         QFont font = painter.font();
         font.setPointSize(cell->fontSize());
         font.setFamily(cell->fontName());
+        font.setBold(cell->bold());
         painter.setFont(font);
         QPen pen = painter.pen();
         pen.setWidth(m_factor);
         painter.setPen(pen);
 
-        QRect rc(cell->left()*m_factor, cell->top()*m_factor,
-                 cell->width() * m_factor, cell->height() * m_factor);
+        QRectF rc(cell->left()*m_factor, cell->top()*m_factor,
+                  cell->width() * m_factor, cell->height() * m_factor);
         m_drawObj->drawRect(painter, rc, cell->drawLeft(),
                             cell->drawTop(), cell->drawRight(), cell->drawBottom());
         painter.drawText(rc, Qt::AlignCenter, cell->text());
@@ -86,5 +87,105 @@ ReportCell* ReportPage::addCellAtRight(ReportCell* leftCell, int width, QString 
 
 void ReportPage::addCellsFromJson(QString fileName)
 {
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = file.readAll();
+    QJsonDocument jdoc = QJsonDocument::fromJson(data);
+    QJsonObject jobj = jdoc.object();
+    QJsonArray jcells = jobj["cells"].toArray();
+    for (int i = 0; i < jcells.count(); i++)
+    {
+        ReportCell* cell = new ReportCell(this);
+        QJsonObject jcell = jcells.at(i).toObject();
+        cell->fromJObject(jcell);
+        cells << cell;
+    }
 
+    file.close();
+
+}
+
+void ReportPage::addCellsFromJson(QString fileName, QStringList& values, double& cellsHeight)
+{
+    double t = 0;
+    double b = 0;
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = file.readAll();
+    QJsonDocument jdoc = QJsonDocument::fromJson(data);
+    QJsonObject jobj = jdoc.object();
+    QJsonArray jcells = jobj["cells"].toArray();
+    for (int i = 0; i < jcells.count(); i++)
+    {
+        ReportCell* cell = new ReportCell(this);
+        QJsonObject jcell = jcells.at(i).toObject();
+        cell->fromJObject(jcell);
+        if (i <= (values.count() - 1))
+        {
+            cell->setText(values[i]);
+        }
+        if (i == 0)
+        {
+            t = cell->top();
+            b = cell->bottom();
+        }
+        else
+        {
+            if (cell->top() < t)
+            {
+                t = cell->top();
+            }
+            if (cell->bottom() > b)
+            {
+                b = cell->bottom();
+            }
+        }
+        cellsHeight = b - t;
+        cells << cell;
+    }
+
+    file.close();
+}
+
+void ReportPage::appendCellsFromJson(QString fileName, QStringList& values, double& cellsHeight, double topMargin)
+{
+    double t = 0;
+    double b = 0;
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = file.readAll();
+    QJsonDocument jdoc = QJsonDocument::fromJson(data);
+    QJsonObject jobj = jdoc.object();
+    QJsonArray jcells = jobj["cells"].toArray();
+    for (int i = 0; i < jcells.count(); i++)
+    {
+        ReportCell* cell = new ReportCell(this);
+        QJsonObject jcell = jcells.at(i).toObject();
+        cell->fromJObject(jcell);
+        if (i <= (values.count() - 1))
+        {
+            cell->setText(values[i]);
+        }
+        if (i == 0)
+        {
+            t = cell->top();
+            b = cell->bottom();
+        }
+        else
+        {
+            if (cell->top() < t)
+            {
+                t = cell->top();
+            }
+            if (cell->bottom() > b)
+            {
+                b = cell->bottom();
+            }
+        }
+        cellsHeight = b - t;
+        cell->setTop(cell->top() + topMargin);
+        cells << cell;
+    }
+
+    file.close();
 }

@@ -4,8 +4,10 @@
 #include <QObject>
 #include <QRectF>
 #include <QJsonObject>
+#include <functional>
+using namespace std;
 class ReportCell;
-typedef void (*ProcessCell)(ReportCell* cell) ;
+
 class ReportCell : public QObject
 {
     Q_OBJECT
@@ -69,6 +71,9 @@ public:
     QJsonObject toJsonObject();
     void fromJObject(QJsonObject& jobj);
 
+    bool bold() const;
+    void setBold(bool newBold);
+
 signals:
 private:
     bool m_drawLeft;
@@ -86,6 +91,7 @@ private:
     bool m_selected;
     int m_colIndex;
     int m_rowIndex;
+    bool m_bold;
 
 };
 

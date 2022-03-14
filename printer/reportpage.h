@@ -4,6 +4,10 @@
 #include <QObject>
 #include "reportcell.h"
 #include <QPainter>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "../draw/drawobject.h"
 class ReportPage : public QObject
 {
@@ -19,7 +23,8 @@ public:
     double addHorCells(double left, double top, double height, QStringList& values, QList<double>& widths);
     ReportCell* addCellAtRight(ReportCell* leftCell, int width, QString text);
     void addCellsFromJson(QString fileName);
-
+    void addCellsFromJson(QString fileName, QStringList& values, double& cellsHeight);
+    void appendCellsFromJson(QString fileName, QStringList& values, double& cellsHeight, double topMargin);
 signals:
 private:
     double m_factor;

@@ -28,6 +28,7 @@ void ReportCellPropertyDialog::setCell(ReportCell* newCell)
     ui->edtHeight->setText(QString("%1").arg(m_cell->height()));
     ui->edtFontSize->setText(QString("%1").arg(m_cell->fontSize()));
     ui->cbbFontName->setCurrentText(m_cell->fontName());
+    ui->chkBold->setChecked(m_cell->bold());
 
 
 
@@ -48,6 +49,7 @@ void ReportCellPropertyDialog::on_btnOk_clicked()
     m_cell->setHeight(ui->edtHeight->text().toDouble());
     m_cell->setFontSize(ui->edtFontSize->text().toInt());
     m_cell->setFontName(ui->cbbFontName->currentText());
+    m_cell->setBold(ui->chkBold->isChecked());
 
     accept();
 }

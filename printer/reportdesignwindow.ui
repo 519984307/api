@@ -161,7 +161,7 @@
        <item>
         <widget class="QPushButton" name="btnSetResizeCellHeight">
          <property name="text">
-          <string>PushButton</string>
+          <string>选中对象高度减半</string>
          </property>
         </widget>
        </item>

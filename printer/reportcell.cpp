@@ -9,6 +9,7 @@ ReportCell::ReportCell(QObject* parent) : QObject(parent)
     m_drawTop = true;
     m_drawRight = true;
     m_drawBottom = true;
+    m_bold = false;
 
 }
 
@@ -20,6 +21,7 @@ const QString& ReportCell::text() const
 void ReportCell::setText(const QString& newText)
 {
     m_text = newText;
+
 }
 
 
@@ -218,6 +220,7 @@ QJsonObject ReportCell::toJsonObject()
     jobj["drawBottom"] = m_drawBottom;
     jobj["fontName"] = m_fontName;
     jobj["fontSize"] = m_fontSize;
+    jobj["bold"] = m_bold;
 
     return jobj;
 }
@@ -235,5 +238,16 @@ void ReportCell::fromJObject(QJsonObject& jobj)
     m_text = jobj["text"].toString();
     m_fontName = jobj["fontName"].toString();
     m_fontSize = jobj["fontSize"].toInt();
+    m_bold = jobj["bold"].toBool();
 
+}
+
+bool ReportCell::bold() const
+{
+    return m_bold;
+}
+
+void ReportCell::setBold(bool newBold)
+{
+    m_bold = newBold;
 }

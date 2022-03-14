@@ -9,7 +9,7 @@ ReportDesignView::ReportDesignView(QWidget* parent) :
     m_helper = new WidgetHelper(this);
     m_helper->setControl(this);
     m_pageLeft = 48;
-    m_pageTop = 48;
+    m_pageTop = 12;
     m_operation = ControlOperation::OP_NONE;
     m_drawObj = new DrawObject(this);
     setMouseTracking(true);
@@ -37,9 +37,7 @@ void ReportDesignView::paintEvent(QPaintEvent* event)
     painter.setMatrix(matrix);
 
     painter.setPen(QColor(203, 203, 223));
-    painter.drawLine(0, 0, width(), 0);
-    painter.drawLine(0, 0, 0, height());
-
+    painter.drawRect(QRect(0, 0, 793, 1123));
     painter.setPen(Qt::black);
     for (int i = 0; i < cells.count(); i++)
     {
@@ -48,6 +46,7 @@ void ReportDesignView::paintEvent(QPaintEvent* event)
         QFont font = painter.font();
         font.setFamily(cell->fontName());
         font.setPointSize(cell->fontSize());
+        font.setBold(cell->bold());
         painter.setFont(font);
 
         QRectF rc = cell->rectF();
@@ -258,7 +257,7 @@ void ReportDesignView::loadFromFile(QString fileName)
 
 }
 
-void ReportDesignView::processSelectCells(ProcessCell processCell)
+void ReportDesignView::processSelectCells(std::function<void(ReportCell* cell)>  processCell)
 {
     for (int i = 0; i < cells.count(); i++)
     {
@@ -275,7 +274,7 @@ void ReportDesignView::processSelectCells(ProcessCell processCell)
 
 ReportCell* ReportDesignView::getFirstSelectCell()
 {
-    QPoint curPoint = getCursorPoint();
+
     for (int i = 0; i < cells.count(); i++)
     {
         ReportCell* cell = cells.at(i);
@@ -332,7 +331,7 @@ void ReportDesignView::fitToMaxHeight()
 {
     QList<ReportCell*> selCells;
     getSelectCells(selCells);
-    int h = 0;
+    double h = 0;
     for (int i = 0; i < selCells.count(); i++)
     {
         ReportCell* cell = selCells.at(i);
@@ -371,6 +370,31 @@ double ReportDesignView::calSelectCellsSumWidth()
 
 
     return d;
+}
+
+void ReportDesignView::resetSelectCellsHeightByFactor(double factor)
+{
+    processSelectCells([&](ReportCell * cell)
+    {
+        cell->setHeight(cell->height()*factor);
+    });
+
+}
+
+void ReportDesignView::deleteSelectCells()
+{
+    for (int i = cells.count() - 1; i >= 0; i--)
+    {
+        ReportCell* cell = cells.at(i);
+        if (cell->selected())
+        {
+            cells.removeAt(i);
+            delete cell;
+
+        }
+    }
+    update();
+
 }
 
 ControlOperation ReportDesignView::operation() const

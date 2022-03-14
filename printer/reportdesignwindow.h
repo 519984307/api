@@ -50,6 +50,8 @@ private slots:
 
     void on_btnCalValues_clicked();
 
+    void on_btnSetResizeCellHeight_clicked();
+
 private:
     Ui::ReportDesignWindow* ui;
     ReportDesignView* m_view;
