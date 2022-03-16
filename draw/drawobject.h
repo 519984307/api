@@ -31,6 +31,8 @@ public:
     void drawPixmap(QPainter& painter, int startX, int startY, QPoint center, int width, int height, QPixmap& pix);
     void drawPixmap(QPainter& painter, double angle, int startX, int startY, QPoint center, int width, int height, QPixmap& pix);
     void drawLine(QPainter& painter, int startX, int startY, QPoint pt1, QPoint pt2);
+    void drawLines(QPainter& painter, QVector<QPoint>& points);
+
     bool pointInLine(QPoint pt1, QPoint pt2, QPoint pt);
     void drawStraightLine(QPainter& painter, QPoint& pt1, QPoint pt2);
     QPoint getStraightLineEndPoint(QPoint& pt1, QPoint pt2);
@@ -46,6 +48,10 @@ public:
     QRect getRect(QPoint pt1, QPoint pt2);
     double getLineRadian(QPoint pt1, QPoint pt2);
     double getLineAngle(QPoint pt1, QPoint pt2);
+
+    //绘制原点坐标系
+    void drawOriginCross(QPainter& painter, QPoint& centerPoint, QRect& clientRect);
+
 
     ///绘制从左向右黄金螺旋线
     void drawLeftGoldSpiral(QPainter& painter, QPoint startPt, int width);

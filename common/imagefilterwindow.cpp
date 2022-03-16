@@ -61,6 +61,11 @@ void ImageFilterWindow::operatorFiles(bool bDeleteSrc)
     {
         QString destPath = path + "/" + m_model->item(i)->text();
         QString srcPath = m_model->item(i, 4)->text();
+        QFileInfo info(destPath);
+        if (info.exists())
+        {
+            destPath = path + "/" + newNoDashUuid() + "." + info.suffix() ;
+        }
         QFile::copy(srcPath, destPath);
         if (bDeleteSrc)
         {

@@ -5,7 +5,7 @@
 #include <QSet>
 #include <QListWidget>
 #include <QFileDialog>
-#include "src/api/config/stringlistinfo.h"
+#include "../api/config/stringlistinfo.h"
 
 namespace Ui
 {

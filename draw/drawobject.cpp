@@ -139,6 +139,28 @@ void DrawObject::drawLine(QPainter& painter, int startX, int startY, QPoint pt1,
 
 }
 
+void DrawObject::drawLines(QPainter& painter, QVector<QPoint>& points)
+{
+    QPoint pt1, pt2, pt0;
+    for (int i = 0; i < points.count(); i++)
+    {
+        if (i == 0)
+        {
+            pt1 = points.at(i);
+            pt0 = points.at(i);
+            pt2 = pt1;
+        }
+        else
+        {
+            pt2 = points.at(i);
+            painter.drawLine(pt1.x(), pt1.y(), pt2.x(), pt2.y());
+            pt1 = pt2;
+        }
+    }
+
+
+}
+
 bool DrawObject::pointInLine(QPoint pt1, QPoint pt2, QPoint pt)
 {
 
@@ -257,6 +279,12 @@ double DrawObject::getLineRadian(QPoint pt1, QPoint pt2)
 double DrawObject::getLineAngle(QPoint pt1, QPoint pt2)
 {
     return atan2(pt2.y() - pt1.y(), pt2.x() - pt1.x()) * (180 / 3.141592653);
+}
+
+void DrawObject::drawOriginCross(QPainter& painter, QPoint& centerPoint, QRect& clientRect)
+{
+    painter.drawLine(clientRect.left(), centerPoint.y(), clientRect.right(), centerPoint.y());
+    painter.drawLine(centerPoint.x(), clientRect.top(), centerPoint.x(), clientRect.bottom());
 }
 
 void DrawObject::drawLeftGoldSpiral(QPainter& painter, QPoint startPt, int width)
