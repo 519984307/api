@@ -17,3 +17,5 @@ void BaseWidget::setUuid(const QString& newUuid)
 {
     m_uuid = newUuid;
 }
+
+

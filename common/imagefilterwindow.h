@@ -6,11 +6,12 @@
 #include <QImageReader>
 #include <QStandardItemModel>
 
-#include "src/api/file/fileseacher.h"
-#include "src/api/file/folderselectdialog.h"
+#include "../api/file/fileseacher.h"
+#include "../api/file/folderselectdialog.h"
 #include <QDesktopServices>
 #include <QFile>
 #include <QButtonGroup>
+#include "../api/global/globaldata.h"
 
 namespace Ui
 {
