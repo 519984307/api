@@ -133,7 +133,7 @@ bool ScannerManager::savConfig()
     lini->setValue("DefaultScan_Index", m_scannerIndex);//扫描仪列表 默认扫描仪序号
     lini->setValue("ShowUI",  m_showUI); //扫描仪自带界面
     lini->setValue("DuplexEnabled",  m_duplexEnabled); //扫描仪自带界面
-    lini->setValue("ScanType",  "平板扫描"); //扫描仪自带界面
+    lini->setValue("ScanType",  m_scanType); //扫描仪自带界面
     lini->setValue("ColorSetting", m_colorIndex);  //颜色设置
     lini->setValue("Orientation",  m_orientation);  //放纸方式
     lini->setValue("Rotation",  m_rotation);  //旋转角度
@@ -159,6 +159,57 @@ void ScannerManager::initScannerList()
             scannerList << operation->m_device_list.at(i);
         }
     }
+
+
+#else
+    if (scannerList.count() > 0)
+    {
+        return;
+    }
+    SANE_Status lSANE_Status;
+    const SANE_Device** devices = nullptr;
+    lSANE_Status = sane_get_devices(&devices, SANE_TRUE);//返回本地直连设备
+    if (SANE_STATUS_GOOD != lSANE_Status)
+    {
+        return;
+    }
+    int scanner_count = 0;
+    for (int i = 0;; i++)
+    {
+        if (devices[i] == nullptr)
+        {
+            break;
+        }
+        else
+        {
+            scanner_count++;
+        }
+    }
+    qDebug() << "scanner_count is " << scanner_count << endl;
+    for(int i=0;i<scanner_count;i++)
+    {
+        QString scaner_name = devices[i]->vendor;
+        QString model = devices[i]->model;
+
+        QString name=devices[i]->name;
+        scannerList<<name;
+
+        SANE_Handle handle = nullptr;
+        SANE_String_Const device_name = devices[i]->name;
+        SANE_Status status = sane_open(device_name, &handle);
+        if (status == SANE_STATUS_GOOD)
+        {
+            scannerListHandle<<handle;
+        }
+        else
+        {
+            scannerListHandle<<nullptr;
+        }
+
+    }
+
+   delete devices;
+
 #endif
 
 }
@@ -209,6 +260,42 @@ void ScannerManager::startScan(ScanInfo& info)
         //  {
         QMessageBox::information(nullptr, "提示", "高扫 扫描失败，请重试");
         // }
+    }
+#else
+    if (m_scanType == "平板扫描")
+    {
+
+
+
+        if (ScannerApp::m_ScannerCore->doScanToFile(info.handle,info.pathName))
+        {
+
+        }
+        else
+        {
+            QMessageBox::information(nullptr, "提示", "扫描失败，请重试");
+        }
+
+    }
+    else
+    {
+        //测试高扫
+        QString fileName, FilesCount;
+        int index, iPicCount;
+        QStringList fileNames;
+        if (ScannerApp::m_ScannerCore->doScanToDir(0,info.handle,info.pathName, fileNames, FilesCount))
+        {
+            iPicCount = FilesCount.toInt();
+            for (index = 0; index < iPicCount; index ++)
+            {
+                //lAllFilePath = lAllFileDir + "00" + QString::number(index + 1) + ".jpg";
+
+            }
+          }
+          else
+          {
+        QMessageBox::information(nullptr, "提示", "高扫 扫描失败，请重试");
+        }
     }
 #endif
 
@@ -264,7 +351,7 @@ void ScannerManager::loadIniFile()
     ini->setIniCodec("UTF8");
     ini ->beginGroup("canner");//功能
     m_showUI = ini->value("ShowUI", false).toBool();
-    m_scanType = ini->value("ScanType", "平板扫描").toString();
+    m_scanType = ini->value("ScanType", m_scanType).toString();
     m_rotation = ini->value("Rotation").toInt();
     m_scanArea = ini->value("StandardSize").toInt();
     m_scanAreaWidth = ini->value("StandardSizeW").toInt();

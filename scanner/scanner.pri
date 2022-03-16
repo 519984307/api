@@ -55,7 +55,7 @@ contains(DEFINES,APP_LINUX_X64){
 }
 contains(DEFINES,APP_LINUX_MIPS){
     LIBS+=\
-       -L$$PWD/sane/lib/mips/ -lsane
+       $$PWD/sane/lib/mips/libsane.so.1
 
 }
 contains(DEFINES,APP_LINUX_ARM){
