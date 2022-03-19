@@ -21,6 +21,8 @@ LIBS +=\
 contains(DEFINES,APP_LINUX_MIPS) {
 LIBS +=\
     $$PWD/linux/mips/lib/libopencv_world.so.4.0
+
+
 }
 
 

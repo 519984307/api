@@ -28,6 +28,9 @@ struct ScanInfo
     QString pathName;
     QString folder;
     int index;
+   #ifndef APP_WINDOWS_X64
+    SANE_Handle handle;
+   #endif
 };
 
 class ScannerManager : public QObject
@@ -39,6 +42,8 @@ public:
     void updateUI();
 #ifdef APP_WINDOWS_X64
     DTwainAPP* operation = DTwainAPP::getDTInstance();
+#else
+    QList<SANE_Handle> scannerListHandle;
 #endif
     int sc_DefaultScan_Index;//扫描仪列表 默认扫描仪序号
     bool sc_ShowUI;  //windows  是否显示自带扫描仪驱动界面

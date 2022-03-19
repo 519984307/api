@@ -277,7 +277,7 @@ void Scanner_Operation::writeppm_header(SANE_Parameters& pars, QByteArray& qByte
     qByteArray.resize(ppm_header_size);
 }
 
-bool Scanner_Operation::read_bytes(SANE_Handle handle, QByteArray& qByteArray)
+bool Scanner_Operation::read_bytes(SANE_Handle handle, QByteArray& qByteArray,SANE_Parameters &pars)
 {
     SANE_Status lSANE_Status;
     SANE_Byte data[32 * 1024];
@@ -285,6 +285,12 @@ bool Scanner_Operation::read_bytes(SANE_Handle handle, QByteArray& qByteArray)
     SANE_Int length;
     SANE_Int init_filesize = qByteArray.size();
     SANE_Int filesize = qByteArray.size();
+    SANE_Status status = sane_get_parameters(handle, &pars);
+    if (status != SANE_STATUS_GOOD)
+    {
+        return false;
+    }
+
     while (1)
     {
         memset(data, 0x00, static_cast<size_t>(max_length));
@@ -312,26 +318,29 @@ bool Scanner_Operation::read_bytes(SANE_Handle handle, QByteArray& qByteArray)
     return false;
 }
 
-bool Scanner_Operation::read_image(SANE_Handle handle, QList<QImage>& qImagelist)
+bool Scanner_Operation::read_image(SANE_Handle handle, QList<QImage*>& qImagelist)
 {
 
     SANE_Parameters pars;
     SANE_Status status = sane_get_parameters(handle, &pars);
-    if (!status == SANE_STATUS_GOOD)
+    if (status != SANE_STATUS_GOOD)
     {
         return false;
     }
     QByteArray qByteArray;
     writeppm_header(pars, qByteArray);
-    while (read_bytes(handle, qByteArray))
+    QStringList base64List;
+    while (read_bytes(handle, qByteArray,pars))
     {
-        QImage qImage;
-        if (qImage.loadFromData(reinterpret_cast<uchar*>(qByteArray.data()), qByteArray.size()))
+        QImage* qImage = new QImage;
+        if (qImage->loadFromData(reinterpret_cast<uchar*>(qByteArray.data()), qByteArray.size()))
         {
-            qImagelist.append(qImage);
+            qImagelist<<qImage;
+            return true;
         }
         else
         {
+            sane_cancel(handle);
             return false;
         }
     }
@@ -344,7 +353,7 @@ bool Scanner_Operation::doScanToFile(SANE_Handle handle, QString AllFilePath)
     if (status == SANE_STATUS_GOOD)
     {
         sane_set_io_mode(handle, false);
-        QList<QImage> qImage;
+        QList<QImage*> qImage;
         if (read_image(handle, qImage))
         {
             QFileInfo fileInfo(AllFilePath);
@@ -359,7 +368,7 @@ bool Scanner_Operation::doScanToFile(SANE_Handle handle, QString AllFilePath)
             }
             if (qImage.count() > 0)
             {
-                qImage.at(0).save(AllFilePath, "JPG", 100);
+                qImage.at(0)->save(AllFilePath, "JPG", 100);
                 qDebug() << "AllFilePath:" << AllFilePath << endl;
                 if (QFileInfo::exists(AllFilePath))
                 {
@@ -387,7 +396,7 @@ bool Scanner_Operation::doScanToDir_Test(SANE_Handle handle, QString lAllFileDir
     if (status == SANE_STATUS_GOOD)
     {
         sane_set_io_mode(handle, false);
-        QList<QImage> qImagelist;
+        QList<QImage*> qImagelist;
         if (read_image(handle, qImagelist))
         {
             QFileInfo fileInfo(lAllFileDir);
@@ -405,7 +414,7 @@ bool Scanner_Operation::doScanToDir_Test(SANE_Handle handle, QString lAllFileDir
                 QString ALLFilePath;
                 qDebug() << "i:" << i << " lAllFileDir:" << lAllFileDir << endl;
                 ALLFilePath = lAllFileDir + QUuid::createUuid().toString(QUuid::WithoutBraces) + ".jpg";
-                qImagelist.at(i).save(ALLFilePath, "JPG", 100);
+                qImagelist.at(i)->save(ALLFilePath, "JPG", 100);
                 aFileNameList.append(ALLFilePath);
                 imagecount++;
             }
@@ -432,6 +441,7 @@ bool Scanner_Operation::doScanToDir(int type, SANE_Handle handle, QString lAllFi
 
 bool Scanner_Operation::doScanToDir_BT(SANE_Handle handle, QString lAllFileDir, QStringList& aFileNameList, QString& aFilesCount)
 {
+    sane_cancel(handle);
     SANE_Status status = sane_start(handle);
     qDebug() << "doScanToDir_BT status:" << status << endl;
     qDebug() << "doScanToDir_BT lAllFileDir is " << lAllFileDir << endl;
@@ -439,27 +449,24 @@ bool Scanner_Operation::doScanToDir_BT(SANE_Handle handle, QString lAllFileDir, 
     if (status == SANE_STATUS_GOOD)
     {
         sane_set_io_mode(handle, false);
-        QList<QImage> qImagelist;
+        QList<QImage*> qImagelist;
         if (read_image(handle, qImagelist))
         {
-            QFileInfo fileInfo(lAllFileDir);
+            QFileInfo info(lAllFileDir);
+
             QDir dir;
-            if (!dir.exists(fileInfo.absolutePath()))
+            dir.mkpath(info.absolutePath());
+
+
+
+            if(qImagelist.count()>0)
             {
-                if (!dir.mkpath(fileInfo.absolutePath()))
-                {
-                    sane_cancel(handle);
-                    return false;
-                }
-            }
-            for (int i = 0; i < qImagelist.count(); i++)
-            {
-                QString ALLFilePath;
-                qDebug() << "i:" << i << " lAllFileDir:" << lAllFileDir << endl;
-                ALLFilePath = lAllFileDir + "00" + QString::number(i + 1) + ".jpg";
-                qImagelist.at(i).save(ALLFilePath, "JPG", 100);
-                aFileNameList.append(ALLFilePath);
+
+                qImagelist.at(0)->save(lAllFileDir);
+                aFileNameList.append(lAllFileDir);
+                qDebug()<<lAllFileDir;
                 imagecount++;
+
             }
         }
         sane_cancel(handle);
@@ -480,7 +487,7 @@ bool Scanner_Operation::doScanToDir_ZJ(SANE_Handle handle, QString lAllFileDir, 
         if (status == SANE_STATUS_GOOD)
         {
             sane_set_io_mode(handle, false);
-            QList<QImage> qImagelist;
+            QList<QImage*> qImagelist;
             if (read_image(handle, qImagelist))
             {
                 QFileInfo fileInfo(lAllFileDir);
@@ -503,7 +510,7 @@ bool Scanner_Operation::doScanToDir_ZJ(SANE_Handle handle, QString lAllFileDir, 
                     QString ALLFilePath;
                     qDebug() << "i:" << i << " lAllFileDir:" << lAllFileDir << endl;
                     ALLFilePath = lAllFileDir + "00" + QString::number(imagecount + 1) + ".jpg";
-                    qImagelist.at(i).save(ALLFilePath, "JPG", 100);
+                    qImagelist.at(i)->save(ALLFilePath, "JPG", 100);
                     aFileNameList.append(ALLFilePath);
                     imagecount++;
                 }

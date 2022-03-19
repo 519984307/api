@@ -7,6 +7,11 @@
 #include "sane/include/sane.h"
 #include "scanner.h"
 #include <QJsonObject>
+#include <QBuffer>
+#include <QByteArray>
+#include <QPointer>
+#include <QList>
+#include <QCryptographicHash>
 class Scanner_Operation : public QObject
 {
     Q_OBJECT
@@ -23,9 +28,9 @@ public:
     bool doScanToDir_ZJ(SANE_Handle handle, QString lAllFileDir, QStringList& aFileNameList, QString& aFilesCount);
     bool doScanToDir_BT(SANE_Handle handle, QString lAllFileDir, QStringList& aFileNameList, QString& aFilesCount);
 
-    bool read_image(SANE_Handle handle, QList<QImage>& qImage);
+    bool read_image(SANE_Handle handle, QList<QImage*>& qImage);
     void writeppm_header(SANE_Parameters& pars, QByteArray& qByteArray);
-    bool read_bytes(SANE_Handle handle, QByteArray& qByteArray);
+    bool read_bytes(SANE_Handle handle, QByteArray& qByteArray,SANE_Parameters &pars);
 
     bool set_color_option(SANE_Handle handle, SANE_Int option, SANE_String value);
     bool set_DPI_option(SANE_Handle handle, SANE_Int option, SANE_Int& value);
