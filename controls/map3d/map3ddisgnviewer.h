@@ -11,6 +11,8 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include "map3dobjectpropertydialog.h"
+#include <QFileDialog>
 
 namespace Ui
 {
@@ -30,12 +32,20 @@ public:
     ControlOperation operation() const;
     void setOperation(ControlOperation newOperation);
     void addBaseMap(QString fileName);
+    void deleteSelectedObjects();
+    void moveSelectedObjectToBottom();
+    void setSelectedObject();
+    Map3dObject* selectedObject();
+    void cloneSelectedObject();
+
 
 
     bool showBasemap() const;
     void setShowBasemap(bool newShowBasemap);
 
     void saveToFile(QString fileName);
+    void save();
+    void saveAs();
     void loadFromFile(QString fileName);
     void exportToFile(QString fileName);
 
@@ -43,6 +53,8 @@ protected:
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseDoubleClickEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+
 private:
     Ui::Map3dDisgnViewer* ui;
     ControlOperation m_operation;
@@ -51,6 +63,7 @@ private:
     QPoint m_originPoint;
     QPixmap m_baseMap;
     bool m_showBasemap;
+    QString m_fileName;
 };
 
 #endif // MAP3DDISGNVIEWER_H

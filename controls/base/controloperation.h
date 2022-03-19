@@ -8,7 +8,9 @@ enum ControlOperation
     OP_ADD_OBJECT,
     //正在添加对象
     OP_ADDING_OBJECT,
+    OP_ADD_RECT_OBJECT,
     OP_SELECT,
+    OP_MOVE_OBJECT,
     OP_DELETE_OBJECT,
     OP_PASTE_SELECT_OBJECTS,
     OP_SET_CENTER_POINT,
