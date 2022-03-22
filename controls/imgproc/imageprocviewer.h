@@ -33,6 +33,7 @@ public:
     void getImageFromMat(Mat& src);
     void restoreFromMat(Mat& src);
     void pasteTo(Mat& src, int l, int t, int w, int h);
+    void pasteTo(Mat& src, int l, int t, int w, int h, Scalar s);
 
     const QString& pathName() const;
     void setPathName(const QString& newPathName);

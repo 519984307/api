@@ -102,6 +102,42 @@ void ImageProcViewer::pasteTo(Mat& src, int l, int t, int w, int h)
     }
 }
 
+void ImageProcViewer::pasteTo(Mat& src, int l, int t, int w, int h, Scalar s)
+{
+    Mat roi = m_imgData(Rect(l, t, w, h));
+
+    for (int j = 0; j < roi.rows; j++)
+    {
+        uchar* dataSrc = src.ptr<uchar>(j);
+        uchar* dataRoi = roi.ptr<uchar>(j);
+        for (int i = 0; i < roi.cols; i++)
+        {
+            if ((0 == dataSrc[i * 3]) &&
+                (0 == dataSrc[i * 3 + 1]) &&
+                (0 == dataSrc[i * 3 + 2]))
+            {
+
+            }
+            else
+            {
+                dataRoi[i * 3] = dataSrc[i * 3];
+                dataRoi[i * 3 + 1] = dataSrc[i * 3 + 1];
+                dataRoi[i * 3 + 2] = dataSrc[i * 3 + 2];
+            }
+
+        }
+
+    }
+
+
+
+    reloadImgData();
+    if (m_isAutoSaved)
+    {
+        save();
+    }
+}
+
 const QString& ImageProcViewer::pathName() const
 {
     return m_pathName;

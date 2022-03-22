@@ -17,5 +17,6 @@
 #include "fillholeprocoperator.h"
 #include "autocutborderprocoperator.h"
 #include "copyroiprocoperator.h"
+#include "pickredcolorprocoperator.h"
 
 #endif // IMAGEPROCLIST_H

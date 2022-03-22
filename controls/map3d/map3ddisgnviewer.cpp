@@ -47,7 +47,15 @@ void Map3dDisgnViewer::paintEvent(QPaintEvent* event)
     for (int i = 0; i < m_objects.count(); i++)
     {
         Map3dObject* obj = m_objects.at(i);
-        m_draw->drawLines(painter, obj->points);
+        if (obj->points.count() == 1)
+        {
+            painter.drawEllipse(obj->points.at(0), 5, 5);
+        }
+        else
+        {
+            m_draw->drawLines(painter, obj->points);
+        }
+
         painter.drawPoint(obj->centerPoint());
         if (obj->selected())
         {
@@ -174,7 +182,15 @@ void Map3dDisgnViewer::setSelectedObject()
     {
 
         QPainterPath path;
-        path.addPolygon(obj->polygon());
+        if (obj->points.count() == 1)
+        {
+            path.addEllipse(obj->points.at(0), 4, 4);
+        }
+        else
+        {
+            path.addPolygon(obj->polygon());
+        }
+
         if (path.contains(curPt))
         {
             selObjs << obj;
@@ -185,11 +201,11 @@ void Map3dDisgnViewer::setSelectedObject()
     {
         qSort(selObjs.begin(), selObjs.end(), [](Map3dObject * obj1, Map3dObject * obj2)
         {
-            QSize sz1 = obj1->polygon().boundingRect().size();
-            QSize sz2 = obj2->polygon().boundingRect().size();
-            return sz1.width() * sz1.height() < sz2.width() * sz2.height();
+            int sz1 = obj1->sizeArea();
+            int sz2 = obj2->sizeArea();
+            return sz1 < sz2;
         });
-        selObjs.last()->setSelected(true);
+        selObjs.at(0)->setSelected(true);
 
     }
 
@@ -258,6 +274,16 @@ void Map3dDisgnViewer::mousePressEvent(QMouseEvent* event)
     {
         m_addPoints << curPt;
 
+    }
+    else if (m_operation == OP_ADD_POINT_OBJECT)
+    {
+
+        Map3dObject* obj = new Map3dObject(this);
+        obj->points << curPt;
+
+        m_objects << obj;
+        m_addPoints.clear();
+        m_operation = OP_NONE;
     }
     else if (m_operation == OP_ADD_RECT_OBJECT)
     {

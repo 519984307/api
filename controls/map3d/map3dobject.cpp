@@ -6,6 +6,8 @@ Map3dObject::Map3dObject(QObject* parent) : QObject(parent)
     m_color = QColor(254, 254, 254);
     m_height = 300;
     m_objectType = OBJ_OBJECT;
+    m_iconIndex = -1;
+    m_devId = "";
 
 }
 
@@ -26,6 +28,7 @@ QJsonObject Map3dObject::toJsonObject()
     jobj["height"] = m_height;
     jobj["objectType"] = m_objectType;
     jobj["iconIndex"] = m_iconIndex;
+    jobj["devId"] = m_devId;
     int r, g, b;
     m_color.getRgb(&r, &g, &b);
     jobj["color"] = QString("0x%1%2%3").arg(r, 2, 16, QLatin1Char('0')).arg(g, 2, 16, QLatin1Char('0')).arg(b, 2, 16, QLatin1Char('0'));
@@ -59,6 +62,7 @@ QJsonObject Map3dObject::toExportJsonObject()
     jobj["height"] = m_height;
     jobj["objectType"] = m_objectType;
     jobj["iconIndex"] = m_iconIndex;
+    jobj["devId"] = m_devId;
     return jobj;
 
 }
@@ -75,6 +79,7 @@ void Map3dObject::fromJsonObject(QJsonObject& jobj)
     m_objectType = jobj["objectType"].toString();
     m_iconIndex = jobj["iconIndex"].toInt();
     m_color = hexToColor(jobj["color"].toString(), m_color);
+    m_devId = jobj["devId"].toString();
 
 }
 
@@ -207,4 +212,27 @@ int Map3dObject::iconIndex() const
 void Map3dObject::setIconIndex(int newIconIndex)
 {
     m_iconIndex = newIconIndex;
+}
+
+int Map3dObject::sizeArea()
+{
+    if (points.count() == 1)
+    {
+        return 16;
+    }
+    else
+    {
+        QSize sz = polygon().boundingRect().size();
+        return sz.width() * sz.height();
+    }
+}
+
+const QString& Map3dObject::devId() const
+{
+    return m_devId;
+}
+
+void Map3dObject::setDevId(const QString& newDevId)
+{
+    m_devId = newDevId;
 }

@@ -30,6 +30,7 @@ void Map3dObjectPropertyDialog::setMap3dObject(Map3dObject* newMap3dObject)
     ui->edtHeight->setText(QString("%1").arg(m_map3dObject->height()));
     ui->cbbObjectType->setCurrentText(m_map3dObject->objectType());
     ui->edtIconIndex->setText(QString("%1").arg(m_map3dObject->iconIndex()));
+    ui->edtDevId->setText(m_map3dObject->devId());
 }
 
 void showMap3dObjectPropertyDialog(Map3dObject* obj)
@@ -62,6 +63,7 @@ void Map3dObjectPropertyDialog::on_btnOk_clicked()
     m_map3dObject->setHeight(ui->edtHeight->text().toFloat());
     m_map3dObject->setObjectType(ui->cbbObjectType->currentText());
     m_map3dObject->setIconIndex(ui->edtIconIndex->text().toInt());
+    m_map3dObject->setDevId(ui->edtDevId->text());
     accept();
 }
 

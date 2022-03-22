@@ -48,6 +48,10 @@ public:
 
     int iconIndex() const;
     void setIconIndex(int newIconIndex);
+    int sizeArea();
+
+    const QString& devId() const;
+    void setDevId(const QString& newDevId);
 
 signals:
 private:
@@ -58,6 +62,7 @@ private:
     double m_height;
     QString m_objectType;
     int m_iconIndex;
+    QString m_devId;
 
 };
 
